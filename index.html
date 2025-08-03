@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BookShop</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h2 {
+      margin-top: 30px;
+    }
+    input, button {
+      margin-top: 10px;
+      padding: 5px;
+    }
+    #message {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📚 Welcome to the BookShop</h1>
+
+  <h2>Available Books:</h2>
+  <ul id="book-list"></ul>
+
+  <h2>Buy a Book by ID:</h2>
+  <input type="number" id="book-id" placeholder="Enter Book ID" />
+  <button onclick="buyBook()">Buy Book</button>
+  <p id="message"></p>
+
+  <h2>🛍️ Arun's Purchases:</h2>
+  <ul id="purchase-list"></ul>
+
+  <script>
+    // Book class
+    class Book {
+      constructor(id, title, price) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
+      }
+
+      getDetails() {
+        return `${this.title} - ₹${this.price} (ID: ${this.id})`;
+      }
+    }
+
+    // BookShop class
+    class BookShop {
+      constructor() {
+        this.books = [];
+      }
+
+      addBook(book) {
+        this.books.push(book);
+      }
+
+      viewBooks() {
+        const bookList = document.getElementById("book-list");
+        bookList.innerHTML = "";
+
+        if (this.books.length === 0) {
+          bookList.innerHTML = "<li>No books available.</li>";
+        } else {
+          this.books.forEach(book => {
+            const li = document.createElement("li");
+            li.textContent = book.getDetails();
+            bookList.appendChild(li);
+          });
+        }
+      }
+
+      getBookById(id) {
+        const index = this.books.findIndex(book => book.id === id);
+        if (index !== -1) {
+          return this.books.splice(index, 1)[0];  // remove from list and return
+        } else {
+          return null;
+        }
+      }
+    }
+
+    // User class
+    class User {
+      constructor(name) {
+        this.name = name;
+        this.purchasedBooks = [];
+      }
+
+      buy(bookShop, bookId) {
+        const book = bookShop.getBookById(bookId);
+        const msg = document.getElementById("message");
+
+        if (book) {
+          this.purchasedBooks.push(book);
+          msg.textContent = `${this.name} bought "${book.title}"`;
+        } else {
+          msg.textContent = `Book with ID ${bookId} is not available.`;
+        }
+
+        bookShop.viewBooks();
+        this.showPurchases();
+      }
+
+      showPurchases() {
+        const purchaseList = document.getElementById("purchase-list");
+        purchaseList.innerHTML = "";
+
+        if (this.purchasedBooks.length === 0) {
+          purchaseList.innerHTML = "<li>No purchases yet.</li>";
+        } else {
+          this.purchasedBooks.forEach(book => {
+            const li = document.createElement("li");
+            li.textContent = book.getDetails();
+            purchaseList.appendChild(li);
+          });
+        }
+      }
+    }
+
+    // --- Setup ---
+    const shop = new BookShop();
+    const user1 = new User("Arun");
+
+    // Add 10 books
+    shop.addBook(new Book(1, "Harry Potter", 500));
+    shop.addBook(new Book(2, "The Alchemist", 300));
+    shop.addBook(new Book(3, "Wings of Fire", 250));
+    shop.addBook(new Book(4, "Think and Grow Rich", 200));
+    shop.addBook(new Book(5, "Zero to One", 350));
+    shop.addBook(new Book(6, "Rich Dad Poor Dad", 400));
+    shop.addBook(new Book(7, "The Monk Who Sold His Ferrari", 375));
+    shop.addBook(new Book(8, "Atomic Habits", 450));
+    shop.addBook(new Book(9, "Ikigai", 275));
+    shop.addBook(new Book(10, "Deep Work", 425));
+
+    // Show books
+    shop.viewBooks();
+
+    // Buy function for button
+    function buyBook() {
+      const bookIdInput = document.getElementById("book-id");
+      const bookId = parseInt(bookIdInput.value);
+      if (!isNaN(bookId)) {
+        user1.buy(shop, bookId);
+        // bookIdInput.value = "";
+      } else {
+        document.getElementById("message").textContent = "Please enter a valid book ID.";
+      }
+    }
+  </script>
+</body>
+</html>
