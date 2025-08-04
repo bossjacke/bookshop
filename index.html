@@ -67,7 +67,7 @@
         bookList.innerHTML = "";
 
         if (this.books.length === 0) {
-          bookList.innerHTML = "<li>No books available.</li>";
+          bookList.innerHTML = "No books available.";
         } else {
           this.books.forEach(book => {
             const li = document.createElement("li");
@@ -114,7 +114,7 @@
         purchaseList.innerHTML = "";
 
         if (this.purchasedBooks.length === 0) {
-          purchaseList.innerHTML = "<li>No purchases yet.</li>";
+          purchaseList.innerHTML = "No purchases yet.";
         } else {
           this.purchasedBooks.forEach(book => {
             const li = document.createElement("li");
@@ -142,7 +142,7 @@
     shop.addBook(new Book(10, "Deep Work", 425));
 
     // Show books
-    shop.viewBooks();
+    // shop.viewBooks();
 
     // Buy function for button
     function buyBook() {
